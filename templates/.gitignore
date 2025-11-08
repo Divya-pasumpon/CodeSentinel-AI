@@ -1,0 +1,11 @@
+# Python virtual environment
+venv/
+
+# Bytecode compiled files
+__pycache__/
+
+# AI Model file
+*.pkl
+
+# VS Code settings
+.vscode/

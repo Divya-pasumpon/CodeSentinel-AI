@@ -1,0 +1,68 @@
+<!-- templates/ai_index.html -->
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeSentinel AI Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-dark text-light">
+
+    <div class="container my-5">
+        <div class="text-center mb-4">
+            <h1 class="display-4"><i class="bi bi-robot"></i> CodeSentinel AI Predictor</h1>
+            <p class="lead text-body-secondary">Enter a PyPI package name to get a real-time risk prediction from our ML Model.</p>
+        </div>
+
+        <!-- The submission form -->
+        <form method="POST" class="mb-5">
+            <div class="input-group">
+                <input type="text" name="package_name" class="form-control form-control-lg" placeholder="e.g., requests, django, flask..." required>
+                <button class="btn btn-primary" type="submit">Analyze</button>
+            </div>
+        </form>
+
+        <!-- This section only appears AFTER we have a result -->
+        {% if result %}
+            {% if result.error %}
+                <!-- Show an error if the package wasn't found -->
+                <div class="alert alert-danger">{{ result.error }}</div>
+            {% else %}
+                <!-- Show the results card -->
+                {% set is_risky = result.prediction == 1 %}
+                <div class="card {% if is_risky %}border-danger{% else %}border-success{% endif %}">
+                    <div class="card-header text-center">
+                        <h2 class="mb-0">Analysis for: <span class="fw-bold">{{ result.package_name }}</span></h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-center">
+                                <h3>Prediction:</h3>
+                                {% if is_risky %}
+                                    <div class="alert alert-danger display-4"><i class="bi bi-exclamation-octagon-fill me-2"></i>RISKY</div>
+                                    <p class="lead">Confidence: {{ result.confidence.risky }}%</p>
+                                {% else %}
+                                    <div class="alert alert-success display-4"><i class="bi bi-shield-check me-2"></i>SAFE</div>
+                                    <p class="lead">Confidence: {{ result.confidence.safe }}%</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Key Features Analyzed:</h4>
+                                <ul class="list-group">
+                                    <li class="list-group-item bg-dark">GitHub Followers: <strong>{{ result.features.github_followers }}</strong></li>
+                                    <li class="list-group-item bg-dark">GitHub Account Age: <strong>{{ result.features.github_account_age_days }} days</strong></li>
+                                    <li class="list-group-item bg-dark">Package Age: <strong>{{ result.features.package_age_days }} days</strong></li>
+                                    <li class="list-group-item bg-dark">Number of Versions: <strong>{{ result.features.num_versions }}</strong></li>
+                                    <li class="list-group-item bg-dark">Dangerous Code Found: <strong>{{ 'Yes' if result.features.has_dangerous_code else 'No' }}</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>

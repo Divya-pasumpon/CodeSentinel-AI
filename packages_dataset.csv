@@ -1,0 +1,13 @@
+package_name,has_author,has_homepage,github_followers,github_account_age_days,package_age_days,num_versions,has_dangerous_code,is_risky
+requests,1,1,2500,4000,4500,150,0,0
+pandas,0,0,5200,4200,5000,200,1,0
+numpy,1,0,8000,5500,6000,400,1,0
+colorama,0,0,300,4800,4300,25,0,0
+tqdm,0,0,1200,3200,4000,50,0,0
+flask,1,1,15000,4600,5100,100,0,0
+django,1,1,20000,6000,6500,150,0,0
+py-loader,0,0,2,30,45,1,1,1
+color-utilz,0,0,0,15,20,1,1,1
+reqeusts,1,0,5,90,80,2,0,1
+data-parser,0,0,1,40,40,1,1,1
+official-api,1,0,10,120,110,3,0,1

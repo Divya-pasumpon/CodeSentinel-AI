@@ -1,0 +1,92 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeSentinel AI Dashboard</title>
+    <!-- We're using Bootstrap for instant styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .score-box {
+            border-radius: 0.5rem;
+        }
+        .score-red { border-left: 5px solid #dc3545; }
+        .score-yellow { border-left: 5px solid #ffc107; }
+        .score-green { border-left: 5px solid #198754; }
+    </style>
+</head>
+<body class="bg-dark text-light">
+
+    <div class="container my-5">
+        <div class="text-center mb-4">
+            <h1 class="display-4"><i class="bi bi-shield-check"></i> CodeSentinel AI</h1>
+            <p class="lead text-body-secondary">Real-time security dashboard for your project dependencies.</p>
+        </div>
+
+        <!-- Summary Metrics -->
+        <div class="row mb-4 g-3">
+            <div class="col-md-4">
+                <div class="p-3 bg-body-secondary rounded-3 text-center">
+                    <h6 class="text-uppercase text-body-secondary">Total Packages Scanned</h6>
+                    <div class="display-6 fw-bold">{{ package_count }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 bg-body-secondary rounded-3 text-center">
+                    <h6 class="text-uppercase text-body-secondary">Project Average Score</h6>
+                    <div class="display-6 fw-bold 
+                        {% if average_score < 50 %}text-danger{% elif average_score < 80 %}text-warning{% else %}text-success{% endif %}">
+                        {{ average_score }}/100
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 bg-body-secondary rounded-3 text-center">
+                    <h6 class="text-uppercase text-body-secondary">Lowest (Riskiest) Score</h6>
+                    <div class="display-6 fw-bold text-danger">{{ lowest_score }}/100</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Details -->
+        <div class="card shadow-sm">
+            <div class="card-header p-3">
+                <h4 class="mb-0">Full Analysis Report</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <!-- This is a loop. It repeats for every 'result' we send it -->
+                    {% for result in results %}
+                    <li class="list-group-item bg-dark">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <h5 class="fw-bold mb-0">{{ result.name }}</h5>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <span class="badge fs-6
+                                    {% if result.score < 50 %}bg-danger{% elif result.score < 80 %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                                    {{ result.score }}/100
+                                </span>
+                            </div>
+                            <div class="col-md-7">
+                                {% if result.factors %}
+                                    <ul class="mb-0">
+                                        {% for factor in result.factors %}
+                                        <li class="text-danger-emphasis"><small>{{ factor }}</small></li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <p class="mb-0 text-success-emphasis"><small>No major risk factors identified.</small></p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
